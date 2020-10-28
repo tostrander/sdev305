@@ -47,14 +47,42 @@ error_reporting(E_ALL);
         $address = $_POST['address'];
         $size = $_POST['size'];
         $toppings = implode(", ", $_POST['toppings']);
+        $method = $_POST['method'];
         $fromName = $fname . " " . $lname;
         $fromEmail = "tostrander@greenriver.edu";
+
+        //Calculate pizza price
+        $toppingCount = count($_POST['toppings']);
+        define('TAX_RATE', 0.1);
+        if ($size == 'small') {
+            $price = 10.0;
+        }
+        elseif ($size == 'medium') {
+            $price = 15.0;
+        }
+        elseif ($size == 'large') {
+            $price = 20.0;
+        }
+        else {
+            $price = 25.0;
+        }
+
+        //Add 50 cents per topping to the price
+        $price += $toppingCount * 1.5;
+
+        //Add sales tax to the price
+        $price += $price * TAX_RATE;
+
+        //Format the price (number_format)
+        $price = number_format($price, 2);
 
         //Print order summary
         echo "<p>Name: $fname $lname</p>";
         echo "<p>Address: $address</p>";
         echo "<p>Size: $size</p>";
         echo "<p>Toppings: $toppings</p>";
+        echo "<p>Method: $method</p>";
+        echo "<p>Price: $$price</p>";
 
         //Send email
         $to = "tostrander@greenriver.edu";
@@ -62,6 +90,8 @@ error_reporting(E_ALL);
         $message = "Order from $fname $lname\r\n";
         $message .= "Address: $address\r\n";
         $message .= "Toppings: $toppings";
+        $message .= "Method: $method";
+        $message .= "Total Price: $price";
         $headers = "Name: $fromName <$fromEmail>";
 
         $success = mail($to, $subject, $message, $headers);
@@ -80,7 +110,7 @@ error_reporting(E_ALL);
 
     <pre>
     <?php
-        //var_dump($_POST);
+        var_dump($_POST);
     ?>
     </pre>
 </div>
