@@ -7,24 +7,14 @@
 // Turn on error reporting
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
+
+//Set the time zone
+date_default_timezone_set('America/Los_Angeles');
+
+//Include header file
+include ('includes/head.html');
 ?>
 
-<!doctype html>
-<html lang="en">
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- CSS (Make sure Bootstrap is first) -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <link rel="stylesheet" href="styles/styles.css" >
-
-    <title>Poppa's Pizza</title>
-
-    <!-- favicon -->
-    <link rel="icon" type="image/png" href="images/pizza.png">
-</head>
 <body>
 
 <div class="container" id="main">
