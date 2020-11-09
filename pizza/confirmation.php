@@ -8,11 +8,17 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
+//Redirect if form has not been submitted
+if (empty($_POST)) {
+    header("location: index.php");
+}
+
 //Set the time zone
 date_default_timezone_set('America/Los_Angeles');
 
-//Include header file
+//Include files
 include ('includes/head.html');
+require ('includes/dbcreds.php');
 ?>
 
 <body>
@@ -31,7 +37,8 @@ include ('includes/head.html');
 
     <?php
 
-        //Get data from POST array
+        //Data validation will go here
+    
         $fname = $_POST['fname'];
         $lname = $_POST['lname'];
         $address = $_POST['address'];
@@ -65,6 +72,16 @@ include ('includes/head.html');
 
         //Format the price (number_format)
         $price = number_format($price, 2);
+
+        //Save order to database
+        $sql = "INSERT INTO pizza(fname, lname, address, 
+        size, toppings, method, price) VALUES
+        ('$fname', '$lname', '$address', '$size', '$toppings', '$method', '$price')";
+        $success = mysqli_query($cnxn, $sql);
+        if (!$success) {
+            echo "<p>Sorry... something went wrong.</p>";
+            return;
+        }
 
         //Print order summary
         echo "<p>Name: $fname $lname</p>";

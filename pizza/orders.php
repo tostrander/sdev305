@@ -10,19 +10,9 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-//Connect to database
-$database = "tostrand_grc";
-$username = "tostrand_grcuser";
-$password = "grcUser!";
-$hostname = "localhost";
-
-$cnxn = @mysqli_connect($hostname, $username, $password, $database)
-    or die("There was a problem.");
-//var_dump($cnxn);
-
-//Include header file
+//Include files
 include ('includes/head.html');
-
+require ('includes/dbcreds.php');
 ?>
 
 <body>
