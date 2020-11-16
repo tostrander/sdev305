@@ -13,12 +13,15 @@ if (empty($_POST)) {
     header("location: index.php");
 }
 
-//Set the time zone
-date_default_timezone_set('America/Los_Angeles');
+//Print the POST array
+echo "<pre>";
+var_dump($_POST);
+echo "</pre>";
 
 //Include files
 include ('includes/head.html');
-require ('includes/dbcreds.php');
+require ('../../../dbcreds.php');
+require ('includes/pizzaFunctions.php');
 ?>
 
 <body>
@@ -38,13 +41,35 @@ require ('includes/dbcreds.php');
     <?php
 
         //Data validation will go here
-    
-        $fname = $_POST['fname'];
-        $lname = $_POST['lname'];
+        $isValid = true;
+
+        //Check first name
+        if (validName($_POST['fname'])) {
+            $fname = $_POST['fname'];
+        }
+        else {
+            echo "<p>Invalid first name</p>";
+            $isValid = false;
+        }
+
+        //Check last name
+        if (validName($_POST['lname'])) {
+            $lname = $_POST['lname'];
+        }
+        else {
+            echo "<p>Invalid last name</p>";
+            $isValid = false;
+        }
+
         $address = $_POST['address'];
         $size = $_POST['size'];
         $toppings = implode(", ", $_POST['toppings']);
         $method = $_POST['method'];
+
+        if (!$isValid) {
+            return;
+        }
+
         $fromName = $fname . " " . $lname;
         $fromEmail = "tostrander@greenriver.edu";
 
@@ -78,6 +103,7 @@ require ('includes/dbcreds.php');
         size, toppings, method, price) VALUES
         ('$fname', '$lname', '$address', '$size', '$toppings', '$method', '$price')";
         $success = mysqli_query($cnxn, $sql);
+        echo $sql;
         if (!$success) {
             echo "<p>Sorry... something went wrong.</p>";
             return;
@@ -115,11 +141,6 @@ require ('includes/dbcreds.php');
              "<p>Sorry... there was a problem.</p>";
     ?>
 
-    <pre>
-    <?php
-        var_dump($_POST);
-    ?>
-    </pre>
 </div>
 </body>
 </html>
