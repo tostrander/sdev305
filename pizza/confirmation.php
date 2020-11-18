@@ -20,7 +20,7 @@ echo "</pre>";
 
 //Include files
 include ('includes/head.html');
-require ('../../../dbcreds.php');
+require ($_SERVER['HOME'].'/dbcreds.php');
 require ('includes/pizzaFunctions.php');
 ?>
 
@@ -61,10 +61,42 @@ require ('includes/pizzaFunctions.php');
             $isValid = false;
         }
 
-        $address = $_POST['address'];
+        //Check method
+        $method = "";
+        if (isset($_POST['method']) AND validMethod($_POST['method'])) {
+            $method = $_POST['method'];
+        }
+        else {
+            echo "<p>Please select pickup or delivery</p>";
+            $isValid = false;
+        }
+
+        // Validate address
+        $address = "";
+        if ($method == 'delivery') {
+            if (!empty($_POST['address'])) {
+                $address = $_POST['address'];
+            }
+            else {
+                echo "<p>Please enter an address for delivery</p>";
+                $isValid = false;
+            }
+        }
+
+        // Validate toppings
+        $toppings = "";
+        if (isset($_POST['toppings'])) {
+            $toppings = $_POST['toppings'];
+            if (!validToppings($toppings)) {
+                echo "<p>Go away, evildoer!</p>";
+                return; //We've been spoofed; stop processing
+            }
+            $toppings = implode(", ", $toppings);
+        }
+
         $size = $_POST['size'];
-        $toppings = implode(", ", $_POST['toppings']);
-        $method = $_POST['method'];
+
+
 
         if (!$isValid) {
             return;
@@ -97,6 +129,15 @@ require ('includes/pizzaFunctions.php');
 
         //Format the price (number_format)
         $price = number_format($price, 2);
+
+        //Prevent sql injection
+        $fname = mysqli_real_escape_string($cnxn, $fname);
+        $lname = mysqli_real_escape_string($cnxn, $lname);
+        $address = mysqli_real_escape_string($cnxn, $address);
+        $size = mysqli_real_escape_string($cnxn, $size);
+        $toppings = mysqli_real_escape_string($cnxn, $toppings);
+        $method = mysqli_real_escape_string($cnxn, $method);
+        $price = mysqli_real_escape_string($cnxn, $price);
 
         //Save order to database
         $sql = "INSERT INTO pizza(fname, lname, address, 

@@ -12,7 +12,7 @@ error_reporting(E_ALL);
 
 //Include files
 include ('includes/head.html');
-require ('includes/dbcreds.php');
+require ($_SERVER['HOME'] . '/dbcreds.php');
 ?>
 
 <body>
@@ -43,7 +43,8 @@ require ('includes/dbcreds.php');
             $fullname = $row['fname'] . " " . $row['lname'];
             $price = $row['price'];
             $method = $row['method'];
-            $order_date = date("M d, Y g:i a", strtotime($row['order_date']) );
+            $order_date = date("M d, Y g:i a",
+                strtotime($row['order_date']."- 3 hours") );
 
             echo "<tr>";
             echo "<td>$order_id</td>";
