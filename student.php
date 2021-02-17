@@ -7,13 +7,9 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-//Connect to database - BAD SECURITY
-$username = 'tostrand';
-$password = '*******';
-$hostname = 'localhost';
-$database = 'tostrand_grc';
-$cnxn = mysqli_connect($hostname, $username, $password, $database);
-echo "Connected!";
+// Connect to DB
+require ('/home/tostrand/connect.php');
+$cnxn = connect();
 
 ?>
 
@@ -29,12 +25,39 @@ echo "Connected!";
 <body>
 <h1>GRC Students</h1>
 
+<form method="get" action="student.php">
+    <input type="text" name="search">
+    <input type="submit" value="Search">
+</form>
+
 <?php
-    //1. Define the query
-    $sql = "SELECT * FROM student";
+    //1. Define the base query
+    $sql = "SELECT sid, first, last, advisor 
+            FROM student";
+
+    echo "<p>GET:</p>";
+    var_dump($_GET);
+    //echo "<p>POST:</p>";
+    //var_dump($_POST);
+
+    if (isset($_GET['advisorid'])){
+        $advisorId = $_GET['advisorid'];
+        $sql .= " WHERE advisor = '$advisorId'";
+    }
+    else if (isset($_GET['search'])) {
+        $searchTerm = $_GET['search'];
+        $sql .= " WHERE sid LIKE '$searchTerm'
+                  OR first LIKE '%$searchTerm%'
+                  OR last LIKE '%$searchTerm%'";
+    }
+    echo "<p>$sql</p>";
 
     //2. Send the query to the db
     $result = mysqli_query($cnxn, $sql);
+
+    if (mysqli_num_rows($result) == 0) {
+        echo "<h2>No results found</h2>";
+    }
 
     //3. Print the result
     //var_dump($result);
@@ -44,8 +67,9 @@ echo "Connected!";
         $sid = $row['sid'];
         $last = $row['last'];
         $first = $row['first'];
+        $advisor = $row['advisor'];
 
-        echo "<p>$sid - $first $last</p>";
+        echo "<p>$sid - $first $last (Advisor: $advisor)</p>";
     }
 
 ?>
