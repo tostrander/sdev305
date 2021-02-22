@@ -8,7 +8,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 // Connect to DB
-require ('/home/tostrand/connect.php');
+require ($_SERVER['HOME'].'/connect.php');
 $cnxn = connect();
 
 ?>
@@ -71,7 +71,6 @@ $cnxn = connect();
 
         echo "<p>$sid - $first $last (Advisor: $advisor)</p>";
     }
-
 ?>
 </body>
 </html>

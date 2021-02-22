@@ -8,7 +8,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 // Connect to DB
-require ('/home/tostrand/connect.php');
+require ($_SERVER['HOME'].'/connect.php');
 $cnxn = connect();
 
 ?>
@@ -31,6 +31,7 @@ $cnxn = connect();
 
 <?php
 
+    //var_dump($_SERVER);
     //Query the DB for advisors
     $sql = "SELECT advisor_id, advisor_first, advisor_last
             FROM advisor";
