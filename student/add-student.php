@@ -1,18 +1,20 @@
 <?php
 
-    // Turn on error reporting
-    ini_set('display_errors', 1);
-    error_reporting(E_ALL);
+    //Make sure the user is coming from the form
+    if (!($_SERVER['REQUEST_METHOD'] == 'POST')) {
 
-    // Connect to DB
-    require ('/home/tostrand/connect.php');
-    $cnxn = connect();
+        //Send user to form page
+        header("location: new-student.php");
+    }
+
+    require ('includes/php-setup.php');
+
 
     /*
-    echo "<pre>";
-    var_dump($_POST);
-    echo "</pre>";
-    */
+        echo "<pre>";
+        var_dump($_SERVER);
+        echo "</pre>";
+    ?*
 
     /*
      * array(6) {
@@ -37,6 +39,9 @@
     $birthdate = $_POST['birthdate'];
     $gpa = $_POST['gpa'];
     $advisor = $_POST['advisor'];
+
+    //VALIDATE DATA BEFORE INSERTING INTO DATABASE
+
 
     $sql = "INSERT INTO student VALUES ('$sid', '$last', '$first', '$birthdate', '$gpa', '$advisor')";
     echo $sql;
