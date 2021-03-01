@@ -120,7 +120,7 @@
             //Write to database
             $sql = "INSERT INTO pizza (fname, lname, address, size, toppings, method, price) 
                     VALUES ('$fname', '$lname', '$address', '$size', '$toppingString', '$method', $total)";
-            echo $sql;
+            //echo $sql;
             $success = mysqli_query($cnxn, $sql);
             if (!$success) {
                 echo "<p>There was an error placing your order. Please call 911.</p>";
