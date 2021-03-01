@@ -1,32 +1,27 @@
+body {
+    background-color: darkred;
+}
+
+.border {
+    border: 2px solid darkgreen!important;
+}
+
+.err {
+    color: darkred;
+    display: none;
+}
+
 h1 {
     color: darkgreen;
+    font-weight: bolder;
 }
 
-.display-4 {
-    font-size: 4.5rem;
-    font-weight: 400;
-    line-height: 1.2;
-}
-
-body {
-    margin: 0 150px;
-    background-color: darkred;
+legend {
+    color: darkgreen;
+    font-variant: small-caps;
 }
 
 #main {
     background-color: white;
 }
 
-fieldset.border {
-    border: 2px solid darkgreen !important;
-}
-
-legend {
-    font-variant: small-caps;
-}
-
-#order {
-    background-color: darkgreen;
-    display: block;
-    margin: 0 30%;
-}

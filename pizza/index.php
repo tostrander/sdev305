@@ -1,127 +1,125 @@
 <?php
-    //Include header file
-    include ('includes/head.html');
+    include('includes/head.html');
 ?>
 
 <body>
 
 <div class="container" id="main">
 
-    <!-- Jumbotron header -->
+    <!-- Jumbotron Header -->
     <div class="jumbotron">
-        <h1 class="display-4">Welcome to Poppa's Pizza</h1>
-        <p class="lead">Serving the Green River community since 1970!</p>
+        <h1 class="display-4">Poppa's Pizza</h1>
+        <p class="lead">Making great pizza since 1950!</p>
     </div>
 
-    <!-- Order form -->
-    <form id="pizzaform" method="post" action="confirmation.php">
+    <!-- Pizza Order Form -->
+    <form action="confirm.php" method="post" id="pizzaform">
 
-        <!-- Contact info -->
+        <!-- Contact Information -->
         <fieldset class="form-group border p-2">
             <legend>Contact Info</legend>
-
             <div class="form-group">
-                <label for="fname">First Name</label>
-                <input type="text" class="form-control" id="fname" name="fname">
-                <span class="d-none text-danger" id="err-fname">Please enter a first name</span>
+                <label for="fname">First Name:</label>
+                <input type="text" class="form-control" id="fname"
+                       placeholder="Enter first name" name="fname">
+                <span class="err" id="err-fname">
+                    Please enter a first name
+                </span>
             </div>
             <div class="form-group">
-                <label for="lname">Last Name</label>
-                <input type="text" class="form-control" id="lname" name="lname">
-                <span class="d-none text-danger" id="err-lname">Please enter a last name</span>
+                <label for="lname">Last Name:</label>
+                <input type="text" class="form-control" id="lname"
+                       placeholder="Enter last name" name="lname">
+                <span class="err" id="err-lname">
+                    Please enter a last name
+                </span>
             </div>
             <div class="form-group">
-                <label for="address">Address</label>
-                <textarea class="form-control" id="address" name="address" rows="3"></textarea>
+                <label for="address">Address:</label>
+                <textarea class="form-control" rows="5" id="address"
+                name="address"></textarea>
+                <span class="err" id="err-address">
+                    Please enter an address
+                </span>
             </div>
         </fieldset>
 
         <!-- Pickup or Delivery -->
         <fieldset class="form-group border p-2">
             <legend>Pickup or Delivery</legend>
-
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="method"
-                       id="pickup" value="pickup" >
-                <label class="form-check-label" for="pickup">
-                    Pickup
+                <label class="form-check-label">
+                    <input type="radio" class="form-check-input"
+                           name="method" value="pickup" checked="checked">Pickup
                 </label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="method"
-                       id="delivery" value="delivery" >
-                <label class="form-check-label" for="delivery">
-                    Delivery
+                <label class="form-check-label">
+                    <input type="radio" class="form-check-input"
+                           name="method" value="delivery">Delivery
                 </label>
             </div>
-            <span class="d-none text-danger" id="err-method">Please choose pickup or delivery</span>
+            <span class="err" id="err-method">
+                    Please select Pickup or Delivery
+            </span>
         </fieldset>
 
         <!-- Toppings -->
         <fieldset class="form-group border p-2">
             <legend>Select Toppings</legend>
-
-            <div class='form-check'>
-                <input class='form-check-input'
-                       type='checkbox' name='toppings[]'
-                       id='olives' value='olives' >
-                <label class='form-check-label'
-                       for='olives'>Olives</label>
+            <div class="form-check">
+                <label class="form-check-label" >
+                <input class="form-check-input" type="checkbox"
+                       value="pepperoni" name="toppings[]">Pepperoni
+                </label>
             </div>
-            <div class='form-check'>
-                <input class='form-check-input'
-                       type='checkbox' name='toppings[]'
-                       id='mushrooms' value='mushrooms' >
-                <label class='form-check-label'
-                       for='mushrooms'>Mushrooms</label>
+            <div class="form-check">
+                <label class="form-check-label" >
+                    <input class="form-check-input" type="checkbox"
+                           value="sausage" name="toppings[]">Sausage
+                </label>
             </div>
-            <div class='form-check'>
-                <input class='form-check-input'
-                       type='checkbox' name='toppings[]'
-                       id='pepperoni' value='pepperoni' >
-                <label class='form-check-label'
-                       for='pepperoni'>Pepperoni</label>
+            <div class="form-check">
+                <label class="form-check-label" >
+                    <input class="form-check-input" type="checkbox"
+                           value="pineapple" name="toppings[]">Pineapple
+                </label>
             </div>
-            <div class='form-check'>
-                <input class='form-check-input'
-                       type='checkbox' name='toppings[]'
-                       id='sausage' value='sausage' >
-                <label class='form-check-label'
-                       for='sausage'>Sausage</label>
+            <div class="form-check">
+                <label class="form-check-label" >
+                    <input class="form-check-input" type="checkbox"
+                           value="canadian-bacon" name="toppings[]">Canadian Bacon
+                </label>
             </div>
         </fieldset>
 
-        <!-- Pizza size -->
+        <!-- Pizza Size -->
         <fieldset class="form-group border p-2">
-            <legend>Pizza Size</legend>
-
-            <select class="form-control" id="size" name="size" >
-                <option value='none'>Select a Size</option>
-                <option value='small'>Small (8")</option>
-                <option value='medium'>Medium (12")</option>
-                <option value='large'>Large (16")</option>
-                <option value='xlarge'>Extra Large (24")</option>
-            </select>
-            <span class="d-none text-danger" id="err-size">Please select a size</span>
-
+            <legend>Select a Size</legend>
+            <div class="form-group">
+                <select id="size" class="form-control" name="size">
+                    <option value="none">Select a Size</option>
+                    <option value="small">Small (8")</option>
+                    <option value="medium">Medium (12")</option>
+                    <option value="large">Large (14")</option>
+                </select>
+                <span class="err" id="err-size">
+                    Please select a size
+                </span>
+            </div>
         </fieldset>
 
-        <!-- Agreement -->
-        <div class="checkbox">
-            <label><input type="checkbox" id="terms" name="terms">I agree to the terms</label>
-        </div>
-
-        <!-- Order button -->
-        <input type="submit" value="Submit your Order">
-
+        <button type="submit" class="btn btn-primary btn-default">Submit</button>
     </form>
 </div>
 
+
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-<!--<script src="scripts/pizza.js"></script>-->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="pizza.js"></script>
+
 </body>
 </html>
