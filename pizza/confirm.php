@@ -3,8 +3,31 @@
     ini_set('display_errors', 1);
     error_reporting(E_ALL);
 
+    //Include files
     include('includes/head.html');
     include('includes/functions.php');
+
+    // Connect to DB
+    require ($_SERVER['HOME'].'/connect.php');
+    $cnxn = connect();
+
+    /*DROP TABLE pizza;
+
+    CREATE TABLE pizza (
+      order_id int(4) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+      fname varchar(30) NOT NULL,
+      lname varchar(30) NOT NULL,
+      address varchar(100) DEFAULT NULL,
+      size varchar(20) NOT NULL,
+      toppings varchar(100) DEFAULT NULL,
+      method varchar(20) NOT NULL,
+      price decimal(6,2) DEFAULT NULL,
+      order_date datetime NOT NULL DEFAULT current_timestamp()
+    );
+
+    INSERT INTO pizza (fname, lname, address, size, toppings, method, price) VALUES
+    ('Joe', 'Shmo', '123 Elm', 'small', 'pepperoni', 'delivery', 15.00);
+    */
 ?>
 <body>
     <div class="container" id="main">
@@ -30,16 +53,50 @@
               ["size"]=>string(6) "medium"
             */
 
-            //Get form data
-            $fname = $_POST['fname'];
-            $lname = $_POST['lname'];
-            $address = $_POST['address'];
-            $method = $_POST['method'];
+            //Get form data & prevent SQL injection
+            $fname = mysqli_real_escape_string($cnxn, $_POST['fname']);
+            $lname = mysqli_real_escape_string($cnxn, $_POST['lname']);
+            $address = mysqli_real_escape_string($cnxn, $_POST['address']);
+            $method = mysqli_real_escape_string($cnxn, $_POST['method']);
             $toppings = array();
             if (!empty($_POST['toppings'])) {
                 $toppings = $_POST['toppings'];
             }
-            $size = $_POST['size'];
+            $size = mysqli_real_escape_string($cnxn, $_POST['size']);
+
+            //Validate the data
+            $isValid = true;
+            if (!validName($fname)) {
+
+                echo "<p>First name is required and must be at least two characters.</p>";
+                $isValid = false;
+            }
+            if (!validName($lname)) {
+
+                echo "<p>Last name is required and must be at least two characters.</p>";
+                $isValid = false;
+            }
+            if (!validAddress($address)) {
+                echo "<p>Address must contain at least ten characters.</p>";
+                $isValid = false;
+            }
+            if (!validMethod($method)) {
+                echo "<p>Go away, evildoer!</p>";
+                return;
+            }
+            if (!validToppings($toppings)) {
+                echo "<p>Go away, evildoer!</p>";
+                return;
+            }
+            if (!validSize($size)) {
+                echo "<p>Please select a valid size</p>";
+                $isValid = false;
+            }
+
+            if (!$isValid) {
+                echo "<p>Please click back to correct your errors.</p>";
+                return;
+            }
 
             //Calculate pizza cost
             $basePrice = getPrice($size);
@@ -58,6 +115,17 @@
 
             $subtotal = subtotal($basePrice, $toppings);
             $total = total($subtotal);
+            $toppingString = implode(", ", $toppings) ;
+
+            //Write to database
+            $sql = "INSERT INTO pizza (fname, lname, address, size, toppings, method, price) 
+                    VALUES ('$fname', '$lname', '$address', '$size', '$toppingString', '$method', $total)";
+            echo $sql;
+            $success = mysqli_query($cnxn, $sql);
+            if (!$success) {
+                echo "<p>There was an error placing your order. Please call 911.</p>";
+                return;
+            }
 
             //Print summary
             thanks($fname);
@@ -73,7 +141,7 @@
             }
             echo "<p>Method: $method</p>";
             if (!empty($toppings)) {
-                echo "<p>Toppings: " . implode(", ", $toppings) . "</p>";
+                echo "<p>Toppings: $toppingString</p>";
             }
             echo "<p>Size: $size</p>";
 
