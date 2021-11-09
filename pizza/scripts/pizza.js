@@ -1,73 +1,74 @@
-//document.getElementById("pizzaform").onsubmit = validate;
+//document.getElementById("pizza-form").onsubmit = validate;
 
-/* Register the validate function for the form submit event */
-let form = document.getElementById("pizzaform");
-form.onsubmit = validate;
-
-/* Make all error messages invisible */
-function clearErrors() {
-    let errors = document.getElementsByClassName("text-danger");
-    for (let i=0; i<errors.length; i++) {
-        errors[i].classList.add("d-none");
-    }
+//Display address block when delivery option is selected
+document.getElementById("delivery").onclick = function() {
+    document.getElementById("address-block").style.display = "block";
 }
 
-/* Validate the pizza form */
-function validate() {
+//Hide address block when pick-up option is selected
+document.getElementById("pickup").onclick = function() {
+    document.getElementById("address-block").style.display = "none";
+}
+
+function validate()
+{
+    let isValid = true;
 
     clearErrors();
-
-    //Create an error flag
-    let isValid = true;
 
     //Validate first name
     let first = document.getElementById("fname").value;
     if (first == "") {
-        let errFname = document.getElementById("err-fname");
-        errFname.classList.remove("d-none");
-        //alert("First name is required");
-        isValid = false; //Stay on the page
+        document.getElementById("err-fname").style.display = "block";
+        isValid = false;
     }
 
     //Validate last name
     let last = document.getElementById("lname").value;
     if (last == "") {
-        let errLname = document.getElementById("err-lname");
-        errLname.classList.remove("d-none");
-        //alert("Last name is required");
-        isValid = false; //Stay on the page
-    }
-
-    //Validate address
-
-
-    //Validate method
-    let method = document.getElementsByName("method");
-    let count = 0;
-    for (let i=0; i<method.length; i++) {
-        if (method[i].checked) {
-            count++;
-        }
-    }
-    if (count == 0) {
-        let errMethod = document.getElementById("err-method");
-        errMethod.classList.remove("d-none");
+        document.getElementById("err-lname").style.display = "block";
         isValid = false;
     }
 
-    //Validate toppings
-
-
-    //Validate size
+    //Validate pizza size
     let size = document.getElementById("size").value;
-    //alert(size);
     if (size == "none") {
-        let errSize = document.getElementById("err-size");
-        errSize.classList.remove("d-none");
+        document.getElementById("err-size").style.display = "block";
+        isValid = false;
+    }
 
-        isValid = false; //Stay on the page
+    //Validate method (pickup or delivery)
+    let method = document.getElementsByName("method");
+    let counter = 0;
+    for (let i=0; i<method.length; i++) {
+        if (method[i].checked) {
+            counter++;
+        }
+    }
+    if (counter == 0) {
+        document.getElementById("err-method").style.display = "block";
+        isValid = false;
+    }
+
+    //Validate address - only if delivery is selected
+    let deliveryChecked = document.getElementById("delivery").checked;
+    //alert(deliveryChecked);
+    if(deliveryChecked) {
+        let address = document.getElementById("address").value;
+        if (address == "") {
+            document.getElementById("erraddress").style.display = "block";
+            isValid = false;
+        }
     }
 
     return isValid;
 }
 
+function clearErrors()
+{
+    //Clear all error messages
+    let errors = document.getElementsByClassName("err");
+    for (let i=0; i<errors.length; i++) {
+        errors[i].style.display = "none";
+    }
+}
