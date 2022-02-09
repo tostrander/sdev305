@@ -1,21 +1,6 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="styles/pizza-styles.css" >
-
-    <title>Poppa's Pizza</title>
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="images/pizza-slice.jpg">
-
-</head>
-<body>
+<?php
+    include("includes/header.html");
+?>
 
 <div id="main" class="container">
     <div class="jumbotron">
@@ -25,9 +10,6 @@
         <p>Blah blah blah...</p>
         <a class="btn btn-primary btn-lg" href="#" role="button">Contact Us</a>
     </div>
-
-    <h1>Thank you for your order!</h1>
-    <h3>Order Summary</h3>
 
     <?php
 
@@ -50,8 +32,6 @@
         $size = $_POST['size'];
         $comment = $_POST['comment'];
         $toppings = implode(", ", $_POST['toppings']);
-
-
 
         //Define constants
         define("TAX_RATE", 0.065);
@@ -83,6 +63,13 @@
         $price = number_format($price, 2);
 
         //Display an Order Summary
+        //echo "<h1>Thank you for your order, $fname!</h1>";
+        //echo '<h1>Thank you for your order, '.$fname.'!</h1>';
+
+        thanks($fname);
+        thanks();
+        echo '<h3>Order Summary</h3>';
+
         //echo "<p>" . $fname . " " . $lname . "</p>";
         echo "<p>Name: $fname $lname</p>";
         echo "<p>Email: $email</p>";
@@ -91,6 +78,52 @@
         echo "<p>Comment: $comment</p>";
         echo "<p>Toppings: $toppings</p>";
         echo "<p>Total Cost: $$price</p>";
+
+        function thanks($name = "")
+        {
+            $msg = "<h1>Thank you for your order";
+            if ($name != "") {
+                $msg .= ", $name";
+            }
+            $msg .= "!</h1>";
+            echo $msg;
+
+            /* Redundant version of the same logic
+            if ($name == "") {
+                echo "<h1>Thank you for your order!</h1>";
+            }
+            else {
+                echo "<h1>Thank you for your order, $name!</h1>";
+            }
+            */
+
+            //echo "<h1>Thank you for your order, $name!</h1>";
+        }
+
+        include("includes/sendEmail.php");
+
+
+
+
+
+        /*
+         * CREATE TABLE pizza (
+            order_id int(6) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            fname VARCHAR(30) NOT NULL,
+            lname VARCHAR(30) NOT NULL,
+            address VARCHAR(50),
+            size VARCHAR(10) NOT NULL,
+            toppings VARCHAR(50),
+            method VARCHAR(10) NOT NULL,
+            price DECIMAL(6, 2) NOT NULL, #Up to 9999.99
+            comment TEXT,
+            order_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP()
+        );
+
+            INSERT INTO pizza (`fname`, `lname`, `address`, `size`, `toppings`, `method`, `price`, `comment`)
+            VALUES ('Gavin', 'Sherman', NULL, 'small', 'pepperoni, sausage', 'pickup', 9.95, NULL);
+
+         */
 
     ?>
 </div>
