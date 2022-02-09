@@ -18,9 +18,18 @@ include ('includes/connect.php');
 $sql = "SELECT order_id, fname, lname, address, size, toppings, 
         method, price, comment, order_date
         FROM pizza
-        ORDER BY order_date DESC";
+        ORDER BY lname";
 $result = @mysqli_query($cnxn, $sql);
 //var_dump($result);
+
+echo "<table>
+        <tr>
+            <th>OrderID</th>
+            <th>Customer</th>
+            <th>Method</th>
+            <th>Size</th>
+            <th>Toppings</th>
+        </tr>";
 
 foreach ($result as $row) {
     //var_dump($row);
@@ -28,8 +37,22 @@ foreach ($result as $row) {
     $order_id = $row['order_id'];
     $fname = $row['fname'];
     $lname = $row['lname'];
-    echo "<p>$order_id - $lname, $fname</p>";
+    $address = $row['address'];
+    $size = $row['size'];
+    $toppings = $row['toppings'];
+    $method = $row['method'];
+    //echo "<p>$order_id - $lname, $fname</p>";
+
+    echo "<tr>
+            <td>$order_id</td>
+            <td>$lname, $fname</td>
+            <td>$method</td>
+            <td>$size</td>
+            <td>$toppings</td>
+          </tr>";
 }
+
+echo "</table>";
 
 ?>
 

@@ -1,5 +1,6 @@
 <?php
     include("includes/header.html");
+    include("includes/functions.php");
 ?>
 
 <div id="main" class="container">
@@ -56,26 +57,21 @@
         <!-- Toppings -->
         <fieldset class="form-group">
             <legend class="col-sm-2 pt-0">Select Toppings</legend>
-            <div class="form-check">
-                <label class="form-check-label">
-                    <input type="checkbox" class="form-check-input" value="cheese" name="toppings[]">Cheese
-                </label>
-            </div>
-            <div class="form-check">
-                <label class="form-check-label">
-                    <input type="checkbox" class="form-check-input" value="pepperoni" name="toppings[]">Pepperoni
-                </label>
-            </div>
-            <div class="form-check">
-                <label class="form-check-label">
-                    <input type="checkbox" class="form-check-input" value="italian-sausage" name="toppings[]">Italian Sausage
-                </label>
-            </div>
-            <div class="form-check">
-                <label class="form-check-label">
-                    <input type="checkbox" class="form-check-input" value="greek-olives" name="toppings[]">Greek Olives
-                </label>
-            </div>
+
+        <?php
+
+            $toppings = getToppings();
+            foreach ($toppings as $topping) {
+                echo "<div class='form-check'>
+                        <label class='form-check-label'>
+                            <input type='checkbox' class='form-check-input' 
+                                   value='$topping' name='toppings[]'>".ucfirst($topping).
+                        "</label>
+                      </div>";
+            }
+
+        ?>
+
             <span class="err" id="err-toppings">Please select at least one topping</span>
         </fieldset>
 
@@ -84,10 +80,15 @@
             <legend class="col-sm-2 pt-0">Pizza Size</legend>
             <div class="form-group">
                 <select class="form-control" id="size" name="size">
-                    <option value="none">-- Select a Size --</option>
-                    <option value="small">Small</option>
-                    <option value="medium">Medium</option>
-                    <option value="large">Large</option>
+
+                    <?php
+                        $sizes = getSizes();
+                        foreach ($sizes as $key=>$desc) {
+                            echo "<option value='$key'>$desc</option>";
+                        }
+
+                    ?>
+
                 </select>
                 <span class="err" id="err-size">Please select a size</span>
             </div>

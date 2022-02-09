@@ -41,6 +41,7 @@
         $numToppings = sizeof($_POST['toppings']);
 
         //Calculate price of pizza
+        //TODO: Replace with function and update size options
         $price = 0.0;
         if ($size == "small") {
             $price = 10.00;
