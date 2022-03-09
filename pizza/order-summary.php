@@ -12,7 +12,7 @@ include("includes/header.html");
 <?php
 
 //Connect to database
-include ('includes/connect.php');
+include ('/home2/tostrand/connect.php');
 //echo "Connected successfully!";
 
 $sql = "SELECT order_id, fname, lname, address, size, toppings, 
@@ -22,14 +22,17 @@ $sql = "SELECT order_id, fname, lname, address, size, toppings,
 $result = @mysqli_query($cnxn, $sql);
 //var_dump($result);
 
-echo "<table>
-        <tr>
-            <th>OrderID</th>
-            <th>Customer</th>
-            <th>Method</th>
-            <th>Size</th>
-            <th>Toppings</th>
-        </tr>";
+echo "<table id='orders' class='display'>
+        <thead>
+            <tr>
+                <th>OrderID</th>
+                <th>Customer</th>
+                <th>Method</th>
+                <th>Size</th>
+                <th>Toppings</th>
+            </tr>
+        </thead>
+        <tbody>";
 
 foreach ($result as $row) {
     //var_dump($row);
@@ -44,7 +47,9 @@ foreach ($result as $row) {
     //echo "<p>$order_id - $lname, $fname</p>";
 
     echo "<tr>
-            <td>$order_id</td>
+            <td>$order_id <a href='view.php?id=$order_id'>view</a>
+                &nbsp;|&nbsp;<a href='index.php?id=$order_id'>edit</a>
+            </td>
             <td>$lname, $fname</td>
             <td>$method</td>
             <td>$size</td>
@@ -52,10 +57,12 @@ foreach ($result as $row) {
           </tr>";
 }
 
-echo "</table>";
+echo "</tbody></table>";
 
 ?>
 
 </div>
-</body>
-</html>
+
+<?php
+    include('includes/footer.html');
+?>

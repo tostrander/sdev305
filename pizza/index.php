@@ -1,6 +1,50 @@
 <?php
     include("includes/header.html");
     include("includes/functions.php");
+
+    //Initialize variables
+    $fname = "";
+    $lname = "";
+    $address = "";
+    $method = "";
+    $size = "";
+    $selectedToppings = array();
+
+
+    //Create a flag variable
+    $edit = isset($_GET['id']);
+
+    //If this is an edit
+    if ($edit) {
+
+        //Set a boolean flag variable
+        $edit = true;
+
+        //Get the ID
+        $order_id = $_GET['id'];
+
+        //Connect to database
+        include ('/home2/tostrand/connect.php');
+
+        //Get pizza order from database
+        $sql = "SELECT fname, lname, address, size, toppings, 
+            method, comment, order_date
+            FROM pizza
+            WHERE order_id = $order_id";
+        $result = @mysqli_query($cnxn, $sql);
+        //var_dump($result);
+        $row = mysqli_fetch_array($result);
+
+        //Assign values to variables
+        $fname = $row['fname'];
+        $lname = $row['lname'];
+        $selectedToppings = explode(", ", $row['toppings']);
+        $size = $row['size'];
+        $method = $row['method'];
+        $address = $row['address'];
+        $comment = $row['comment'];
+        $date = date('m-d-y g:ia', strtotime($row['order_date']));
+    }
 ?>
 
 <div id="main" class="container">
@@ -12,6 +56,17 @@
         <a class="btn btn-primary btn-lg" href="#" role="button">Contact Us</a>
     </div>
 
+
+    <?php
+        //If this is an edit, display order number and order date
+        //at the top of the form
+        if ($edit) {
+            echo "<h2>Order $order $order_id</h2>";
+            echo "<h3>$date</h3>";
+        }
+
+    ?>
+
     <!-- action: where the data will go
          method: how it will get there (get or post)
     -->
@@ -22,19 +77,19 @@
             <legend class="col-sm-2 pt-0">Contact Info</legend>
             <div class="form-group">
                 <label for="fname">First Name:</label>
-                <input type="text" id="fname" name="fname" class="form-control" placeholder="Enter first name">
+                <input type="text" id="fname" name="fname" value="<?php echo $fname ?>" class="form-control" placeholder="Enter first name">
                 <span class="err" id="err-fname">Please enter first name</span>
             </div>
 
             <div class="form-group">
                 <label for="lname">Last Name:</label>
-                <input type="text" id="lname" name="lname" class="form-control" placeholder="Enter last name">
+                <input type="text" id="lname" name="lname" value="<?php echo $lname ?>" class="form-control" placeholder="Enter last name">
                 <span class="err" id="err-lname">Please enter last name</span>
             </div>
 
             <div class="form-group">
                 <label for="email">Email address:</label>
-                <input type="email" id="email" name="email" class="form-control" placeholder="Enter email">
+                <input type="email" id="email" name="email" value="<?php echo $address ?>" class="form-control" placeholder="Enter email">
             </div>
         </fieldset>
 
@@ -43,12 +98,16 @@
             <legend class="col-sm-2 pt-0">Select Pickup or Delivery</legend>
             <div class="form-check">
                 <label class="form-check-label" for="pickup">
-                    <input type="radio" class="form-check-input" id="pickup" name="method" value="pickup" >Pickup
+                    <input type="radio" class="form-check-input" id="pickup" name="method" value="pickup"
+                        <?php if ($method == 'pickup') echo ' checked="checked"' ?>
+                    >Pickup
                 </label>
             </div>
             <div class="form-check">
                 <label class="form-check-label" for="delivery">
-                    <input type="radio" class="form-check-input" id="delivery" name="method" value="delivery">Delivery
+                    <input type="radio" class="form-check-input" id="delivery" name="method" value="delivery"
+                        <?php if ($method == 'delivery') echo ' checked="checked"' ?>
+                    >Delivery
                 </label>
             </div>
             <span class="err" id="err-method">Please select pickup or delivery</span>
@@ -65,7 +124,13 @@
                 echo "<div class='form-check'>
                         <label class='form-check-label'>
                             <input type='checkbox' class='form-check-input' 
-                                   value='$topping' name='toppings[]'>".ucfirst($topping).
+                                   value='$topping' name='toppings[]'";
+
+                if (in_array($topping, $selectedToppings)) {
+                    echo ' checked="checked"';
+                }
+
+                echo ">".ucfirst($topping).
                         "</label>
                       </div>";
             }
@@ -84,7 +149,11 @@
                     <?php
                         $sizes = getSizes();
                         foreach ($sizes as $key=>$desc) {
-                            echo "<option value='$key'>$desc</option>";
+                            echo "<option value='$key'";
+
+                            if ($size == $key) echo ' selected="selected"';
+
+                            echo ">$desc</option>";
                         }
 
                     ?>
@@ -97,7 +166,7 @@
         <!-- Comment field -->
         <div class="form-group">
             <label for="comment">Comment:</label>
-            <textarea class="form-control" rows="5" id="comment" name="comment"></textarea>
+            <textarea class="form-control" rows="5" id="comment" name="comment"><?php echo $comment ?></textarea>
         </div>
 
         <!-- Email Sign-up -->
@@ -108,7 +177,17 @@
         </div>
 
         <!-- Order Button -->
-        <button type="submit" class="btn btn-primary">Place Order</button>
+        <?php
+
+            //I added name and value properties to the button so that when I get to
+            //confirm.php I can determine whether this is a new order (INSERT) or
+            //an edit (UPDATE). I will need to write my SQL accordingly.
+            $buttonText = $edit ? "Save Changes" : "Place Order";
+            $buttonValue = $edit ? "save" : "edit";
+            echo "<button type='submit' class='btn btn-primary' name='button' value='$buttonValue'>$buttonText</button>";
+
+        ?>
+
     </form>
 </div>
 
